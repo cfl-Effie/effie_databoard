@@ -283,7 +283,7 @@ function pushOrder() {
     `<span class="feed-amt">${fmtMoney(rand(59, 2999))}</span>`;
   const feed = document.getElementById('feed');
   feed.prepend(row);
-  while (feed.children.length > 12) feed.removeChild(feed.lastChild);
+  while (feed.children.length > 6) feed.removeChild(feed.lastChild);
 }
 
 function tickFast() {

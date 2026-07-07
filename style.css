@@ -115,14 +115,13 @@ body {
   min-height: 0;
 }
 .col { display: flex; flex-direction: column; gap: 16px; min-height: 0; }
-.col-left .panel:nth-child(1) { flex: 1.35; }
-.col-left .panel:nth-child(2) { flex: 1; }
-.col-center .panel-topo { flex: 1.6; }
+.col .panel:nth-child(1) { flex: 1.4; }
+.col .panel:nth-child(2) { flex: 1; }
 
 .bottom {
-  height: 250px;
+  height: 248px;
   display: grid;
-  grid-template-columns: 1fr 1.3fr 1.2fr;
+  grid-template-columns: 1fr 1.4fr 1fr;
   gap: 16px;
   min-height: 0;
 }
@@ -205,7 +204,7 @@ body {
   gap: 10px;
   align-items: center;
   font-size: 13px;
-  padding: 8px 6px;
+  padding: 6px 6px;
   border-bottom: 1px dashed rgba(154,166,187,.18);
   animation: slideIn .4s ease;
 }
