@@ -33,9 +33,8 @@ body {
 }
 
 #screen {
-  width: 1920px;
-  height: 1080px;
-  transform-origin: center center;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding: 20px 30px 26px;

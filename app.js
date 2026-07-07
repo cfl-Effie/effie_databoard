@@ -376,10 +376,13 @@ pauseBtn.addEventListener('click', () => {
   state.paused = !state.paused;
 });
 
-function fitScreen() {
-  const screen = document.getElementById('screen');
-  const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-  screen.style.transform = 'scale(' + scale + ')';
-}
-window.addEventListener('resize', fitScreen);
-fitScreen();
+window.addEventListener('resize', () => {
+  channelChart.resize();
+  regionChart.resize();
+  forecastChart.resize();
+  visitsChart.resize();
+  radarChart.resize();
+  topoChart.resize();
+  renderTopo();
+});
+window.dispatchEvent(new Event('resize'));
