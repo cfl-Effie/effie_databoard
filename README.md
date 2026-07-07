@@ -30,11 +30,22 @@ A data dashboard (big-screen) project, built incrementally for practice.
 
 ## 本地开发 / Getting Started
 
+零依赖纯静态大屏（ECharts 已本地内置），直接用浏览器打开即可：
+
 ```bash
-git clone <your-remote-url>
-cd effie_databoard
-# 安装依赖与启动（随技术栈补充）
+# 方式一：双击 index.html
+# 方式二：起一个本地静态服务（推荐，避免个别浏览器限制）
+python -m http.server 8080
+# 然后访问 http://localhost:8080
 ```
+
+数据均为前端定时器模拟实时变化，无需后端。
+
+### 当前模块
+- 顶部 KPI：今日订单量 / 实时访问数 / 今日销售额 / 转化率
+- 渠道占比（饼图）、地区订单 TOP（条形图）
+- 订单量预测趋势（实际 + 未来 6 时段预测，折线图）
+- 24 小时访问曲线、实时订单流、智能摘要
 
 ## 许可证 / License
 
