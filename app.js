@@ -50,21 +50,25 @@ const forecastChart = echarts.init(document.getElementById('chartForecast'));
 const visitsChart = echarts.init(document.getElementById('chartVisits'));
 
 function renderChannels() {
-  const data = state.channels.map(c => ({
+  const palette = ['#e8c374', '#b8893f', '#7fa8d6', '#5b6b82', '#9aa6bb'];
+  const data = state.channels.map((c, i) => ({
     name: c.name,
     value: c.value,
-    itemStyle: state.focusChannel && state.focusChannel !== c.name ? { opacity: 0.25 } : {}
+    itemStyle: {
+      color: palette[i % palette.length],
+      borderColor: 'rgba(12,15,20,0.7)', borderWidth: 2,
+      opacity: state.focusChannel && state.focusChannel !== c.name ? 0.25 : 1
+    }
   }));
   channelChart.setOption({
     tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
-    legend: { orient: 'vertical', left: 6, top: 'center', icon: 'circle', itemWidth: 9, itemHeight: 9, itemGap: 14, textStyle: { color: '#6b86b3', fontSize: 13 } },
+    legend: { orient: 'vertical', left: 6, top: 'center', icon: 'circle', itemWidth: 9, itemHeight: 9, itemGap: 14, textStyle: { color: '#93a0b4', fontSize: 13 } },
     series: [{
       type: 'pie',
       radius: ['42%', '66%'],
       center: ['68%', '50%'],
       label: { show: false },
       labelLine: { show: false },
-      itemStyle: { borderColor: 'rgba(6,12,26,0.6)', borderWidth: 2 },
       data: data
     }]
   });
@@ -98,17 +102,17 @@ function renderForecast() {
   forecastChart.setOption({
     tooltip: { trigger: 'axis', valueFormatter: (v) => v == null ? '-' : meta.fmt(v) },
     grid: { left: 10, right: 20, top: 20, bottom: 20, containLabel: true },
-    xAxis: { type: 'category', data: x, axisLabel: { color: '#6b86b3' }, axisLine: { lineStyle: { color: 'rgba(64,158,255,.3)' } } },
-    yAxis: { type: 'value', name: meta.name, nameTextStyle: { color: '#6b86b3' }, axisLabel: { color: '#6b86b3', formatter: (v) => metric === 'sales' ? (v / 10000) + '万' : v }, splitLine: { lineStyle: { color: 'rgba(64,158,255,.1)' } } },
+    xAxis: { type: 'category', data: x, axisLabel: { color: '#93a0b4' }, axisLine: { lineStyle: { color: 'rgba(154,166,187,.3)' } } },
+    yAxis: { type: 'value', name: meta.name, nameTextStyle: { color: '#93a0b4' }, axisLabel: { color: '#93a0b4', formatter: (v) => metric === 'sales' ? (v / 10000) + '万' : v }, splitLine: { lineStyle: { color: 'rgba(154,166,187,.12)' } } },
     series: [
       {
         name: '实际', type: 'line', data: actual, smooth: true, symbol: 'circle', symbolSize: 6,
-        lineStyle: { color: '#22d3ee', width: 3 }, itemStyle: { color: '#22d3ee' },
-        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(34,211,238,.35)' }, { offset: 1, color: 'rgba(34,211,238,0)' }]) }
+        lineStyle: { color: '#7fa8d6', width: 3 }, itemStyle: { color: '#7fa8d6' },
+        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(127,168,214,.35)' }, { offset: 1, color: 'rgba(127,168,214,0)' }]) }
       },
       {
         name: '预测', type: 'line', data: predicted, smooth: true, symbol: 'emptyCircle', symbolSize: 6,
-        lineStyle: { color: '#fbbf24', width: 3, type: 'dashed' }, itemStyle: { color: '#fbbf24' }
+        lineStyle: { color: '#e8c374', width: 3, type: 'dashed' }, itemStyle: { color: '#e8c374' }
       }
     ]
   });
@@ -118,12 +122,12 @@ function renderVisits() {
   visitsChart.setOption({
     tooltip: { trigger: 'axis' },
     grid: { left: 6, right: 12, top: 14, bottom: 6, containLabel: true },
-    xAxis: { type: 'category', data: state.visits24.map((_, h) => h + '时'), axisLabel: { color: '#6b86b3', interval: 3 }, axisLine: { lineStyle: { color: 'rgba(64,158,255,.3)' } } },
-    yAxis: { type: 'value', axisLabel: { color: '#6b86b3' }, splitLine: { lineStyle: { color: 'rgba(64,158,255,.1)' } } },
+    xAxis: { type: 'category', data: state.visits24.map((_, h) => h + '时'), axisLabel: { color: '#93a0b4', interval: 3 }, axisLine: { lineStyle: { color: 'rgba(154,166,187,.3)' } } },
+    yAxis: { type: 'value', axisLabel: { color: '#93a0b4' }, splitLine: { lineStyle: { color: 'rgba(154,166,187,.12)' } } },
     series: [{
       type: 'line', data: state.visits24, smooth: true, symbol: 'none',
-      lineStyle: { color: '#3b82f6', width: 2 },
-      areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(59,130,246,.4)' }, { offset: 1, color: 'rgba(59,130,246,0)' }]) }
+      lineStyle: { color: '#7fa8d6', width: 2 },
+      areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(127,168,214,.4)' }, { offset: 1, color: 'rgba(127,168,214,0)' }]) }
     }]
   });
 }
@@ -269,6 +273,10 @@ pauseBtn.addEventListener('click', () => {
   state.paused = !state.paused;
 });
 
-window.addEventListener('resize', () => {
-  channelChart.resize(); regionChart.resize(); forecastChart.resize(); visitsChart.resize();
-});
+function fitScreen() {
+  const screen = document.getElementById('screen');
+  const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  screen.style.transform = 'scale(' + scale + ')';
+}
+window.addEventListener('resize', fitScreen);
+fitScreen();
