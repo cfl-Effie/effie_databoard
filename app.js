@@ -48,6 +48,17 @@ const channelChart = echarts.init(document.getElementById('chartChannel'));
 const regionChart = echarts.init(document.getElementById('chartRegion'));
 const forecastChart = echarts.init(document.getElementById('chartForecast'));
 const visitsChart = echarts.init(document.getElementById('chartVisits'));
+const topoChart = echarts.init(document.getElementById('chartTopo'));
+const radarChart = echarts.init(document.getElementById('chartRadar'));
+
+state.capability = [82, 76, 90, 88, 84];
+state.services = [
+  { name: '采集网关', status: 'online', load: 62 },
+  { name: '实时计算', status: 'busy', load: 88 },
+  { name: '指标仓库', status: 'online', load: 54 },
+  { name: '告警中心', status: 'online', load: 41 },
+  { name: 'API 边缘', status: 'busy', load: 79 }
+];
 
 function renderChannels() {
   const palette = ['#e8c374', '#b8893f', '#7fa8d6', '#5b6b82', '#9aa6bb'];
@@ -130,6 +141,88 @@ function renderVisits() {
       areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(127,168,214,.4)' }, { offset: 1, color: 'rgba(127,168,214,0)' }]) }
     }]
   });
+}
+
+function renderTopo() {
+  const w = topoChart.getWidth() || 600;
+  const h = topoChart.getHeight() || 400;
+  const cx = w / 2, cy = h / 2;
+  const R = Math.min(w, h) * 0.36;
+  const sat = [
+    { name: '采集网关', cat: 1 },
+    { name: '指标仓库', cat: 1 },
+    { name: '告警中心', cat: 1 },
+    { name: '日志服务', cat: 1 },
+    { name: '实时计算', cat: 2 },
+    { name: 'API 边缘', cat: 2 }
+  ];
+  const nodes = [{
+    name: '数据中枢', x: cx, y: cy, symbolSize: Math.min(w, h) * 0.16,
+    itemStyle: { color: '#7fa8d6' },
+    label: { show: true, position: 'inside', color: '#fff', fontSize: 14, fontWeight: 'bold' }
+  }];
+  sat.forEach((s, i) => {
+    const ang = -Math.PI / 2 + i * (Math.PI * 2 / sat.length);
+    nodes.push({
+      name: s.name, x: cx + Math.cos(ang) * R, y: cy + Math.sin(ang) * R,
+      symbolSize: Math.min(w, h) * 0.11, category: s.cat,
+      label: { show: true, position: 'bottom', color: '#cfe3ff', fontSize: 12 }
+    });
+  });
+  const links = sat.map(s => ({ source: '数据中枢', target: s.name }));
+  topoChart.setOption({
+    tooltip: { trigger: 'item' },
+    series: [{
+      type: 'graph', layout: 'none', roam: false,
+      categories: [
+        { name: '中枢', itemStyle: { color: '#7fa8d6' } },
+        { name: '采集', itemStyle: { color: '#4fd1a5' } },
+        { name: '计算', itemStyle: { color: '#e8c374' } }
+      ],
+      lineStyle: { color: '#5b6b82', width: 1.5, type: [6, 4], opacity: 0.7, curveness: 0.08 },
+      symbol: ['none', 'arrow'], symbolSize: 7,
+      emphasis: { focus: 'adjacency', lineStyle: { opacity: 1, color: '#e8c374' } },
+      label: { show: true },
+      data: nodes,
+      links: links,
+      itemStyle: { shadowBlur: 12, shadowColor: 'rgba(0,0,0,.5)' }
+    }]
+  });
+}
+
+function renderRadar() {
+  radarChart.setOption({
+    tooltip: {},
+    radar: {
+      indicator: [
+        { name: '吞吐', max: 100 }, { name: '弹性', max: 100 }, { name: '安全', max: 100 },
+        { name: '延迟', max: 100 }, { name: '稳定', max: 100 }
+      ],
+      radius: '68%',
+      axisName: { color: '#cfe3ff', fontSize: 13 },
+      splitLine: { lineStyle: { color: 'rgba(154,166,187,.2)' } },
+      splitArea: { areaStyle: { color: ['rgba(127,168,214,.05)', 'rgba(232,195,116,.05)'] } },
+      axisLine: { lineStyle: { color: 'rgba(154,166,187,.2)' } }
+    },
+    series: [{
+      type: 'radar',
+      data: [{ value: state.capability, name: '平台能力',
+        areaStyle: { color: 'rgba(232,195,116,.25)' },
+        lineStyle: { color: '#e8c374', width: 2 },
+        itemStyle: { color: '#e8c374' } }]
+    }]
+  });
+}
+
+function renderLoad() {
+  const el = document.getElementById('load');
+  el.innerHTML = state.services.map(s =>
+    `<div class="load-row">` +
+    `<span class="load-name">${s.name}</span>` +
+    `<span class="load-badge ${s.status}">${s.status}</span>` +
+    `<div class="load-bar"><div class="load-fill ${s.status}" style="width:${s.load}%"></div></div>` +
+    `</div>`
+  ).join('');
 }
 
 function animateValue(el, to, formatter) {
@@ -216,9 +309,16 @@ function tickSlow() {
     arr.push(Math.max(100, Math.round(last * rand(0.95, 1.12))));
     arr.shift();
   });
+  state.capability = state.capability.map(v => Math.max(60, Math.min(99, v + Math.round(rand(-3, 3)))));
+  state.services.forEach(s => {
+    s.load = Math.max(20, Math.min(98, s.load + Math.round(rand(-6, 6))));
+    if (Math.random() < 0.12) s.status = s.status === 'online' ? 'busy' : 'online';
+  });
   renderChannels();
   renderRegions();
   renderForecast();
+  renderRadar();
+  renderLoad();
   renderSummary();
 }
 
@@ -233,6 +333,9 @@ renderChannels();
 renderRegions();
 renderForecast();
 renderVisits();
+renderTopo();
+renderRadar();
+renderLoad();
 renderKpis();
 renderSummary();
 tickClock();

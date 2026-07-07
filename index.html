@@ -51,13 +51,28 @@
           <div class="panel-body"><div id="chartChannel" class="chart"></div></div>
         </div>
         <div class="panel">
-          <div class="panel-title">地区订单 TOP</div>
+          <div class="panel-title">区域订单 TOP</div>
           <div class="panel-body"><div id="chartRegion" class="chart"></div></div>
         </div>
       </div>
 
       <div class="col col-center">
-        <div class="panel panel-lg">
+        <div class="panel panel-topo">
+          <div class="panel-title">数据中枢态势（REALTIME TOPOLOGY）</div>
+          <div class="panel-body"><div id="chartTopo" class="chart"></div></div>
+        </div>
+        <div class="panel panel-summary">
+          <div class="panel-title">智能摘要</div>
+          <div class="panel-body summary" id="summary"></div>
+        </div>
+      </div>
+
+      <div class="col col-right">
+        <div class="panel">
+          <div class="panel-title">平台能力（CAPABILITY）</div>
+          <div class="panel-body"><div id="chartRadar" class="chart"></div></div>
+        </div>
+        <div class="panel">
           <div class="panel-title">
             <span>预测趋势（含未来 6 时段）</span>
             <span class="ctrl">
@@ -68,23 +83,23 @@
           </div>
           <div class="panel-body"><div id="chartForecast" class="chart"></div></div>
         </div>
-        <div class="panel panel-summary">
-          <div class="panel-title">智能摘要</div>
-          <div class="panel-body summary" id="summary"></div>
-        </div>
-      </div>
-
-      <div class="col col-right">
-        <div class="panel">
-          <div class="panel-title">24 小时访问曲线</div>
-          <div class="panel-body"><div id="chartVisits" class="chart"></div></div>
-        </div>
-        <div class="panel panel-feed">
-          <div class="panel-title">实时订单流</div>
-          <div class="panel-body feed" id="feed"></div>
-        </div>
       </div>
     </main>
+
+    <section class="bottom">
+      <div class="panel panel-feed">
+        <div class="panel-title">实时订单流</div>
+        <div class="panel-body feed" id="feed"></div>
+      </div>
+      <div class="panel panel-visits">
+        <div class="panel-title">24 小时访问曲线</div>
+        <div class="panel-body"><div id="chartVisits" class="chart"></div></div>
+      </div>
+      <div class="panel panel-load">
+        <div class="panel-title">服务节点状态（LOAD）</div>
+        <div class="panel-body load" id="load"></div>
+      </div>
+    </section>
   </div>
 
   <script src="./echarts.min.js"></script>
