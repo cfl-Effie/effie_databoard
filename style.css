@@ -96,6 +96,8 @@ html, body {
   min-height: 0;
 }
 .col { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.col-left .panel:nth-child(1) { flex: 1.35; }
+.col-left .panel:nth-child(2) { flex: 1; }
 
 .panel {
   background: var(--panel);
@@ -116,7 +118,35 @@ html, body {
   padding: 10px 14px;
   border-bottom: 1px solid var(--border);
   letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+.ctrl { display: flex; gap: 6px; }
+.seg {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--sub);
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.seg:hover { color: var(--text); border-color: var(--cyan); }
+.seg.active { background: rgba(34,211,238,.15); color: var(--cyan); border-color: var(--cyan); }
+.ctrl-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--cyan);
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.ctrl-btn:hover { background: rgba(34,211,238,.15); }
+.ctrl-btn.paused { color: var(--amber); border-color: var(--amber); }
 .panel-body { flex: 1; min-height: 0; padding: 8px; position: relative; }
 .chart { width: 100%; height: 100%; }
 
