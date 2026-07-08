@@ -141,7 +141,6 @@ body {
   position: absolute; inset: 0; border-radius: 12px; pointer-events: none;
   background: linear-gradient(180deg, rgba(255,255,255,.05), transparent 28%);
 }
-.panel-lg { flex: 1.6; }
 .panel-summary { flex: 1; }
 .panel-feed { flex: 1.2; }
 
@@ -212,37 +211,20 @@ body {
 .feed-info { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .feed-amt { color: var(--gold); font-variant-numeric: tabular-nums; }
 
-.load {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 7px;
-  padding: 6px 18px;
-}
-.load-row {
-  display: grid;
-  grid-template-columns: 96px 72px 1fr;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-}
+.load { display: flex; flex-direction: column; justify-content: center; gap: 7px; padding: 6px 18px; }
+.load-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; font-size: 12px; }
 .load-name { color: var(--text); }
-.load-badge {
-  font-size: 12px;
-  padding: 2px 8px;
-  border-radius: 5px;
-  text-align: center;
-  letter-spacing: .5px;
+.load-badge { padding: 2px 8px; border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+.load-badge.online { background: rgba(79,209,165,.12); color: #7ef3c7; }
+.load-badge.busy { background: rgba(232,195,116,.12); color: #f4d37b; }
+.load-badge.offline { background: rgba(239,107,107,.12); color: #f7a5a5; }
+.load-bar { width: 100%; height: 8px; background: rgba(255,255,255,.07); border-radius: 999px; overflow: hidden; }
+.load-fill { height: 100%; border-radius: 999px; }
+.load-fill.online { background: linear-gradient(90deg, #4fd1a5, #2f9c7b); }
+.load-fill.busy { background: linear-gradient(90deg, #e8c374, #c48f3c); }
+.load-fill.offline { background: linear-gradient(90deg, #ef6b6b, #c84d4d); }
+
+@media (max-width: 1600px) {
+  .grid, .bottom { grid-template-columns: 1fr; height: auto; }
+  .kpis { grid-template-columns: repeat(2, 1fr); }
 }
-.load-badge.online { color: var(--green); border: 1px solid var(--green); }
-.load-badge.busy { color: var(--gold); border: 1px solid var(--gold-deep); }
-.load-bar {
-  height: 12px;
-  background: rgba(154,166,187,.15);
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.4);
-}
-.load-fill { height: 100%; border-radius: 6px; transition: width .6s ease; }
-.load-fill.online { background: linear-gradient(90deg, #4a6f99, #7fa8d6); }
-.load-fill.busy { background: linear-gradient(90deg, #b8893f, #e8c374); }

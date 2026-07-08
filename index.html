@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>数据看板 · effie_databoard</title>
+  <title>监控大屏 · 数据中心运行监控</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -11,9 +11,9 @@
     <header class="topbar">
       <div class="topbar-side left">
         <span class="dot"></span>
-        <span id="onlineText">在线访客 0</span>
+        <span id="onlineText">监控系统在线</span>
       </div>
-      <h1 class="title">实时运营数据大屏</h1>
+      <h1 class="title">数据中心运行监控大屏</h1>
       <div class="topbar-side right">
         <button id="pauseBtn" class="ctrl-btn">⏸ 暂停</button>
         <span id="dateText"></span>
@@ -23,62 +23,62 @@
 
     <section class="kpis">
       <div class="kpi">
-        <div class="kpi-label">今日订单量</div>
-        <div class="kpi-value" id="kpiOrders">0</div>
-        <div class="kpi-sub" id="kpiOrdersSub">较昨日 +0.0%</div>
+        <div class="kpi-label">主机数量</div>
+        <div class="kpi-value" id="kpiHosts">0</div>
+        <div class="kpi-sub" id="kpiHostsSub">共计 0 台主机</div>
       </div>
       <div class="kpi">
-        <div class="kpi-label">实时访问数 / 分</div>
-        <div class="kpi-value" id="kpiVisits">0</div>
-        <div class="kpi-sub" id="kpiVisitsSub">环比 +0.0%</div>
+        <div class="kpi-label">平均 CPU 使用率</div>
+        <div class="kpi-value" id="kpiCpu">0%</div>
+        <div class="kpi-sub" id="kpiCpuSub">历史平均</div>
       </div>
       <div class="kpi">
-        <div class="kpi-label">今日销售额</div>
-        <div class="kpi-value" id="kpiSales">0</div>
-        <div class="kpi-sub" id="kpiSalesSub">目标完成 0%</div>
+        <div class="kpi-label">平均磁盘利用率</div>
+        <div class="kpi-value" id="kpiDisk">0%</div>
+        <div class="kpi-sub" id="kpiDiskSub">采集周期</div>
       </div>
       <div class="kpi">
-        <div class="kpi-label">转化率</div>
-        <div class="kpi-value" id="kpiConv">0%</div>
-        <div class="kpi-sub" id="kpiConvSub">行业均值 3.1%</div>
+        <div class="kpi-label">平均内存使用</div>
+        <div class="kpi-value" id="kpiMem">0 MB</div>
+        <div class="kpi-sub" id="kpiMemSub">实时采集</div>
       </div>
     </section>
 
     <main class="grid">
       <div class="col col-left">
         <div class="panel">
-          <div class="panel-title">渠道占比</div>
+          <div class="panel-title">机型分布</div>
           <div class="panel-body"><div id="chartChannel" class="chart"></div></div>
         </div>
         <div class="panel">
-          <div class="panel-title">区域访问 TOP</div>
+          <div class="panel-title">机房分布</div>
           <div class="panel-body"><div id="chartRegion" class="chart"></div></div>
         </div>
       </div>
 
       <div class="col col-center">
         <div class="panel panel-topo">
-          <div class="panel-title">数据中枢态势（REALTIME TOPOLOGY）</div>
+          <div class="panel-title">系统拓扑态势</div>
           <div class="panel-body"><div id="chartTopo" class="chart"></div></div>
         </div>
         <div class="panel panel-summary">
-          <div class="panel-title">智能摘要</div>
+          <div class="panel-title">运行摘要</div>
           <div class="panel-body summary" id="summary"></div>
         </div>
       </div>
 
       <div class="col col-right">
         <div class="panel">
-          <div class="panel-title">平台能力（CAPABILITY）</div>
+          <div class="panel-title">性能能力</div>
           <div class="panel-body"><div id="chartRadar" class="chart"></div></div>
         </div>
         <div class="panel">
           <div class="panel-title">
-            <span>预测趋势（含未来 6 时段）</span>
+            <span>性能预测</span>
             <span class="ctrl">
-              <button class="seg active" data-metric="orders">订单量</button>
-              <button class="seg" data-metric="visits">访问数</button>
-              <button class="seg" data-metric="sales">销售额</button>
+              <button class="seg active" data-metric="cpu_usage">CPU</button>
+              <button class="seg" data-metric="disk_util">磁盘</button>
+              <button class="seg" data-metric="mem_used">内存</button>
             </span>
           </div>
           <div class="panel-body"><div id="chartForecast" class="chart"></div></div>
@@ -88,21 +88,22 @@
 
     <section class="bottom">
       <div class="panel panel-feed">
-        <div class="panel-title">实时订单流</div>
+        <div class="panel-title">近期告警与事件</div>
         <div class="panel-body feed" id="feed"></div>
       </div>
       <div class="panel panel-visits">
-        <div class="panel-title">24 小时访问曲线</div>
+        <div class="panel-title">24 小时 CPU 趋势</div>
         <div class="panel-body"><div id="chartVisits" class="chart"></div></div>
       </div>
       <div class="panel panel-load">
-        <div class="panel-title">服务节点状态（LOAD）</div>
+        <div class="panel-title">服务节点状态</div>
         <div class="panel-body load" id="load"></div>
       </div>
     </section>
   </div>
 
-  <script src="./echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+  <script src="./data/dashboard_data.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>
